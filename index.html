@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钟破冷知识大全</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        /* 解决VSCode警告问题：添加标准属性 */
+        .gradient-text {
+            background: linear-gradient(to right, #ff9a9e, #fad0c4, #a18cd1);
+            color: transparent;
+            background-clip: text; /* 标准属性 */
+            -webkit-background-clip: text; /* 带前缀属性 */
+            -webkit-text-fill-color: transparent; /* 确保文本透明 */
+        }
+        
+        /* 背景装饰元素 */
+        .decoration {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .decoration.circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            top: 10%;
+            left: 5%;
+            animation: float 15s infinite alternate;
+        }
+        
+        .decoration.triangle {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 260px solid #a18cd1;
+            bottom: 5%;
+            right: 10%;
+            transform: rotate(45deg);
+            animation: rotate 25s infinite linear;
+        }
+        
+        .decoration.square {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            bottom: 15%;
+            left: 15%;
+            transform: rotate(30deg);
+            animation: pulse 10s infinite alternate;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 30px;
+            position: relative;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 40px auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed #ff6b6b;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .author {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .author a {
+            color: #2980b9;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .author a:hover {
+            color: #e74c3c;
+            text-decoration: underline;
+        }
+        
+        .author a::after {
+            content: "🔗";
+            margin-left: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .facts-container {
+            counter-reset: fact-counter;
+        }
+        
+        .fact-item {
+            background: rgba(255, 245, 230, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #e67e22;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .fact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid #d35400;
+        }
+        
+        .fact-item::before {
+            counter-increment: fact-counter;
+            content: counter(fact-counter);
+            position: absolute;
+            top: 10px;
+            left: -15px;
+            background: #e67e22;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .fact-question {
+            font-size: 1.8rem;
+            color: #d35400;
+            margin-bottom: 15px;
+            padding-left: 50px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .fact-question i {
+            margin-right: 15px;
+            color: #e67e22;
+        }
+        
+        .fact-answer {
+            font-size: 1.4rem;
+            color: #555;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            margin-left: 50px;
+            position: relative;
+            border: 1px dashed #f39c12;
+        }
+        
+        .fact-answer::before {
+            content: "💡";
+            position: absolute;
+            left: -40px;
+            top: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .highlight {
+            color: #c0392b;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        .special {
+            background: linear-gradient(to right, #fffde4, #d4fc79);
+            border-left: 5px solid #27ae60;
+        }
+        
+        .special::before {
+            background: #27ae60;
+        }
+        
+        .special .fact-question {
+            color: #27ae60;
+        }
+        
+        .special .fact-question i {
+            color: #2ecc71;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #3498db;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .clown-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            color: #e74c3c;
+            animation: spin 8s linear infinite;
+        }
+        
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            margin: 0 3px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .star:hover,
+        .star.active {
+            color: #f1c40f;
+        }
+        
+        /* 动画效果 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(45deg); }
+            100% { transform: rotate(405deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(30deg); opacity: 0.1; }
+            50% { transform: scale(1.1) rotate(30deg); opacity: 0.15; }
+            100% { transform: scale(1) rotate(30deg); opacity: 0.1; }
+        }
+        
+        /* 导航按钮 */
+        .nav-btn {
+            position: fixed;
+            bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
+        
+        .to-top {
+            right: 30px;
+            color: #e74c3c;
+        }
+        
+        .to-bottom {
+            right: 110px;
+            color: #3498db;
+        }
+        
+        /* 滚动进度条 */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4, #a18cd1);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.2s ease-out;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .fact-question {
+                font-size: 1.5rem;
+                padding-left: 40px;
+            }
+            
+            .fact-answer {
+                font-size: 1.2rem;
+                margin-left: 40px;
+            }
+            
+            .fact-item::before {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .decoration {
+                display: none; /* 在小屏幕上隐藏装饰元素 */
+            }
+            
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .to-top {
+                right: 15px;
+            }
+            
+            .to-bottom {
+                right: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 滚动进度条 -->
+    <div class="scroll-progress"></div>
+    
+    <!-- 背景装饰元素 -->
+    <div class="decoration circle"></div>
+    <div class="decoration triangle"></div>
+    <div class="decoration square"></div>
+    
+    <!-- 导航按钮 -->
+    <div class="nav-btn to-top" title="回到顶部">↑</div>
+    <div class="nav-btn to-bottom" title="滚动到底部">↓</div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="clown-icon">🤡</div>
+            <h1 class="gradient-text">钟破冷知识大全</h1>
+            <p class="author">—— 由 <a href="https://qm.qq.com/q/LDcJjYEEkI" target="_blank">野猪群Q群管家</a> 权威发布</p>
+            
+            <div class="rating">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+        </div>
+        
+        <div class="facts-container">
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-question-circle"></i> 钟破是什么？</h2>
+                <p class="fact-answer">钟破是一个热爱唱歌跳舞的小丑呢~ 他擅长用滑稽的表演给大家带来欢笑，虽然有时候效果可能适得其反。在野猪群中，钟破以其独特的幽默感和不按常理出牌的性格赢得了大家的喜爱（或者说"关注"）。</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-search"></i> 钟破有用吗？</h2>
+                <p class="fact-answer">根据野猪群权威研究，钟破的"用处"主要体现在提供娱乐价值上。但就实际功能而言... 钟破没用不配。不过，在以下方面他确实有所贡献：<br>
+                - 提供群聊话题和表情包素材<br>
+                - 作为反例激励他人进步<br>
+                - 测试群友的忍耐极限<br>
+                - 为和平精英玩家提供"神队友"体验</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-balance-scale"></i> 钟破和菜贱谁更贱？</h2>
+                <p class="fact-answer">经过多轮专业评估和群众投票，最终结果毫无悬念：那当然是钟破啦~ 他以绝对优势摘得"最贱"桂冠！以下是投票结果：<br>
+                - 钟破：87%<br>
+                - 菜贱：10%<br>
+                - 两人平手：3%<br>
+                钟破的"贱"主要表现在：<br>
+                1. 游戏里永远0杀<br>
+                2. 群聊中永远在睡觉<br>
+                3. 唱歌跳舞永远跑调<br>
+                4. 存在本身就是一种"贱"</p>
+            </div>
+            
+            <div class="fact-item special">
+                <h2 class="fact-question"><i class="fas fa-egg"></i> 彩蛋：钟破的游戏战绩</h2>
+                <p class="fact-answer">悄悄告诉你一个秘密！在2024年6月2日，<span class="highlight">wenrongxx</span>和钟破组队打和平精英的狙击团竞。没用的钟破杀了0人，而<span class="highlight">wenrongxx</span>可是杀了20个人呢！以下是详细战报：<br><br>
+                <b>游戏模式：</b> 狙击团竞<br>
+                <b>地图：</b> 仓库<br>
+                <b>持续时间：</b> 8分32秒<br>
+                <b>钟破战绩：</b><br>
+                - 击杀：0<br>
+                - 死亡：15<br>
+                - 助攻：1<br>
+                - 伤害：87<br>
+                <b>wenrongxx战绩：</b><br>
+                - 击杀：20<br>
+                - 死亡：2<br>
+                - 助攻：3<br>
+                - 伤害：3120</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-bed"></i> 钟破起床了吗？</h2>
+                <p class="fact-answer">据我所知，钟破似乎已经睡s了。有目击者称他上次醒来还是在三天前，但仅仅是为了点外卖。以下是钟破的日常作息：<br>
+                <b>00:00-14:00：</b> 深度睡眠<br>
+                <b>14:00-15:00：</b> 点外卖<br>
+                <b>15:00-16:00：</b> 边吃外卖边打游戏<br>
+                <b>16:00-18:00：</b> 午睡<br>
+                <b>18:00-24:00：</b> 声称自己"刚醒"并活跃在群聊</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-gamepad"></i> 钟破的游戏水平</h2>
+                <p class="fact-answer">钟破在游戏界的地位可以用"传奇"来形容，但并非因为他的技术。以下是他的游戏特点：<br>
+                - <b>和平精英：</b> 专业人体描边大师，擅长0杀吃鸡<br>
+                - <b>王者荣耀：</b> 永恒钻石段位，常用英雄庄周（因为可以边玩边睡）<br>
+                - <b>英雄联盟：</b> 青铜选手，主玩提莫（种蘑菇专业户）<br>
+                - <b>原神：</b> 只抽卡不升级，收集了一堆1级角色</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-music"></i> 钟破的音乐天赋</h2>
+                <p class="fact-answer">钟破自称"灵魂歌手"，但他的歌声确实能让灵魂出窍：<br>
+                - 擅长歌曲：所有周杰伦的歌（但从不唱在调上）<br>
+                - 音域：从C调跑到F调再跑回来<br>
+                - 代表作：《睡着的彩虹》（一首关于睡觉的歌）<br>
+                - 粉丝数：3人（包括他自己和两个小号）</p>
+            </div>
+            
+            <div class="fact-item">
+                <h2 class="fact-question"><i class="fas fa-utensils"></i> 钟破的饮食习惯</h2>
+                <p class="fact-answer">钟破的饮食构成简单得令人发指：<br>
+                - 早餐：跳过（因为还没起床）<br>
+                - 午餐：外卖炸鸡或汉堡<br>
+                - 晚餐：外卖披萨或炒饭<br>
+                - 夜宵：泡面+可乐<br>
+                据营养师分析，钟破的饮食结构堪称"垃圾食品教科书"，但他坚称这是"职业玩家标配饮食"。</p>
+            </div>
+            
+            <div class="fact-item special">
+                <h2 class="fact-question"><i class="fas fa-gift"></i> 钟破的成就</h2>
+                <p class="fact-answer">虽然钟破在大多数领域表现"突出"，但他确实取得了一些非凡成就：<br>
+                - 连续365天在群聊中说"我醒了"（尽管明显刚醒）<br>
+                - 创造了和平精英单场0杀15死的记录<br>
+                - 成功让三位声乐老师放弃教学事业<br>
+                - 开发的"如何在游戏中完美避开所有敌人"教程点击量破万<br>
+                - 被选为"最不可能在上午出现的人"奖项得主</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 野猪群冷知识研究中心 | 本内容纯属娱乐，如有雷同，那不可能</p>
+            <p>最后更新：2025年08月08日</p>
+            <p>页面已加载 <span id="visit-count">0</span> 次</p>
+        </div>
+    </div>
+
+    <script>
+        // 星级评分交互
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                // 移除所有星星的active类
+                stars.forEach(s => s.classList.remove('active'));
+                
+                // 为点击的星星及之前的所有星星添加active类
+                for(let i = 0; i <= index; i++) {
+                    stars[i].classList.add('active');
+                }
+                
+                // 显示评分结果
+                setTimeout(() => {
+                    const ratings = ['差评', '较差', '一般', '不错', '非常棒'];
+                    alert(`感谢您为钟破的冷知识评分：${index + 1}星 (${ratings[index]})！`);
+                }, 300);
+            });
+        });
+        
+        // 添加悬停效果到知识卡片
+        const factItems = document.querySelectorAll('.fact-item');
+        factItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateY(-7px)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // 导航按钮功能
+        const toTopBtn = document.querySelector('.to-top');
+        const toBottomBtn = document.querySelector('.to-bottom');
+        
+        toTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        toBottomBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 滚动进度条
+        const progressBar = document.querySelector('.scroll-progress');
+        
+        window.addEventListener('scroll', () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / scrollHeight) * 100;
+            progressBar.style.width = `${scrolled}%`;
+        });
+        
+        // 访问计数器
+        const visitCount = document.getElementById('visit-count');
+        let count = localStorage.getItem('visitCount') || 0;
+        count++;
+        localStorage.setItem('visitCount', count);
+        visitCount.textContent = count;
+        
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            document.body.style.opacity = 1;
+            document.querySelector('.container').style.transform = 'translateY(0)';
+        });
+        
+        // 初始样式设置
+        document.body.style.opacity = 0;
+        document.querySelector('.container').style.transform = 'translateY(20px)';
+        document.querySelector('.container').style.transition = 'transform 0.8s ease-out';
+        document.body.style.transition = 'opacity 1s ease-in';
+    </script>
+</body>
+</html>
